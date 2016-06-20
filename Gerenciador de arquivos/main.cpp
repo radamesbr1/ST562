@@ -14,12 +14,22 @@
 #include <cstdlib>
 #include <stdio.h>
 #include <iostream>
+#include "GerenciadorArquivo.h"
 using namespace std;
 
 /*
  * 
  */
 int main() {
+    
+    char caminho[100];
+    cout << "Digite o nome do arquivo a ser lido: ";
+    cin >> caminho;
+    
+    GerenciadorArquivo arquivo(caminho);
+    
+    
+    
     int sair =0;
     
     while(sair !=7){

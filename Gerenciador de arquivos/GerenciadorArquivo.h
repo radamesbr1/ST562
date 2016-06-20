@@ -1,5 +1,6 @@
-#include <stdlib.h>
+#include <cstdlib>
 #include <stdio.h>
+#include <iostream>
 #include <string>
 #include <list>
 
@@ -10,14 +11,14 @@ using namespace std;
 
 class GerenciadorArquivo {
 public:
-    GerenciadorArquivo();
-    GerenciadorArquivo(const GerenciadorArquivo& orig);
+    GerenciadorArquivo(char caminhoArquivo[]);
+    //GerenciadorArquivo(const GerenciadorArquivo& orig);
     virtual ~GerenciadorArquivo();
     
-    public list<string> camposArquivos;
+    /*public*/ list<string> camposArquivos; //Não precisa o "public"
     
         
-    void GerenciadordeArquivos(string caminhoArquivo);
+    //void GerenciadordeArquivos(string caminhoArquivo);
     bool carregarArquivo();
     bool gerarChavePrimaria();
     bool gerarIndiceSecundarioArquivo(string _field);
@@ -30,7 +31,7 @@ public:
     bool AdicionarRegistroVazio(list<string, string> _reg);
     
 private:
-    string caminhoArquivo;
+    char *caminhoArquivo;
     char separadorCampos = '|';
     char fimRegistro = '#';
     bool finalArquivo = false;

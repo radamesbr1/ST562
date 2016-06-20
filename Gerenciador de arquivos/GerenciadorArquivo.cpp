@@ -21,22 +21,43 @@
 using namespace std;
 
 
-GerenciadorArquivo::GerenciadorArquivo() {
+GerenciadorArquivo::GerenciadorArquivo(char caminhoArquivo[]) {
+    this->caminhoArquivo = caminhoArquivo;
+    
+    ifstream myfile (caminhoArquivo);
+    if (!myfile){
+        cout << "Erro na abertura do arquivo." << endl;
+    }
+    else{
+        cout << "Arquivo aberto para leitura com sucesso." << endl;
+    }
 }
 
+/*
 GerenciadorArquivo::GerenciadordeArquivos(string caminhoArquivo){
-    this->caminhoArquivo= caminhoArquivo;
+    this->caminhoArquivo = caminhoArquivo;
 }
+*/
 
-GerenciadorArquivo::carregarArquivo(){
-    ofstream myfile;
+bool GerenciadorArquivo::carregarArquivo(){
+    
+    ifstream myfile (caminhoArquivo);
+    if (!myfile){
+        cout << "Erro na abertura do arquivo." << endl;
+    }
+    else{
+        cout << "Arquivo aberto para leitura com sucesso." << endl;
+    }
+    
+    //ofstream abre(cria) arquivo para gravar. Correto é ifstream que abre para leitura
+    /*ofstream myfile;                
     myfile=this->caminhoArquivo;
     
     if(ifstream(myfile)){
      cout << "File already exists" << std::endl;
      return false;
     }
-    
+    */
     
 }
 

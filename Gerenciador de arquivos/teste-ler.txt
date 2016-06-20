@@ -1,0 +1,2 @@
+nome|endereço|cep
+teste de leitura
