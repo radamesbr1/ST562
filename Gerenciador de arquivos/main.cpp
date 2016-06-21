@@ -30,7 +30,7 @@ int main() {
     
     
     
-    int sair =0;
+    int sair = 7;
     
     while(sair !=7){
        cout <<("SEJA BEM VINDO AO SEU GERENCIADOR DE ARQUIVOS!\n") << endl; 
