@@ -30,6 +30,9 @@ public:
     bool EspacoVazioFile();
     bool AdicionarRegistroVazio(list<string, string> _reg);
     
+    bool insereFim();
+    
+    
 private:
     char *caminhoArquivo;
     char separadorCampos = '|';

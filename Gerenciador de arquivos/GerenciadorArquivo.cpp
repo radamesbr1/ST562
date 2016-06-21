@@ -15,52 +15,66 @@
 #include <string>
 #include <list>
 #include<iostream>
+#include <vector>
 
 #include "GerenciadorArquivo.h"
 
 using namespace std;
 
-
 GerenciadorArquivo::GerenciadorArquivo(char caminhoArquivo[]) {
     this->caminhoArquivo = caminhoArquivo;
-    
-    ifstream myfile (caminhoArquivo);
-    if (!myfile){
+
+    ifstream myfile(caminhoArquivo);
+    if (!myfile) {
         cout << "Erro na abertura do arquivo." << endl;
+    } else {
+        cout << "Arquivo aberto para leitura com sucesso." << endl;
     }
-    else{
+
+    insereFim();
+}
+
+bool GerenciadorArquivo::carregarArquivo() {
+
+    ifstream myfile(caminhoArquivo);
+    if (!myfile) {
+        cout << "Erro na abertura do arquivo." << endl;
+    } else {
         cout << "Arquivo aberto para leitura com sucesso." << endl;
     }
 }
 
-/*
-GerenciadorArquivo::GerenciadordeArquivos(string caminhoArquivo){
-    this->caminhoArquivo = caminhoArquivo;
-}
-*/
+bool GerenciadorArquivo::insereFim() {
 
-bool GerenciadorArquivo::carregarArquivo(){
-    
-    ifstream myfile (caminhoArquivo);
-    if (!myfile){
-        cout << "Erro na abertura do arquivo." << endl;
+    ifstream myfile(caminhoArquivo);
+    char line;
+    vector <int> posicao;
+    if (myfile.is_open()) {
+        while (!myfile.eof()) //enquanto end of file for false continua
+        {
+            myfile.get(line);
+            if (line == '#') {
+                posicao.insert(posicao.end(), myfile.tellg());
+            }
+        }
+
+        /*vector<int>::iterator scan = posicao.begin();
+        while (scan != posicao.end()) {
+            cout << *scan << endl;
+            scan++;
+        }*/
+
+        for (int i = 0; i < posicao.size(); i++) {
+            cout << posicao[i] << endl;
+            
+        }
+
+        //buffer = getchar();
+        //int length = myfile.tellg();
+        //cout << buffer << endl;
     }
-    else{
-        cout << "Arquivo aberto para leitura com sucesso." << endl;
-    }
-    
-    //ofstream abre(cria) arquivo para gravar. Correto é ifstream que abre para leitura
-    /*ofstream myfile;                
-    myfile=this->caminhoArquivo;
-    
-    if(ifstream(myfile)){
-     cout << "File already exists" << std::endl;
-     return false;
-    }
-    */
-    
 }
 
 GerenciadorArquivo::~GerenciadorArquivo() {
-}
 
+}
