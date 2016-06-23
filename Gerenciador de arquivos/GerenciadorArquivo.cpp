@@ -26,90 +26,96 @@ GerenciadorArquivo::GerenciadorArquivo(char caminhoArquivo[]) {
 
     ifstream myfile(caminhoArquivo);
     if (!myfile) {
-        cerr << "Erro na abertura do arquivo." << endl;
-    } /*else {
+        cout << "Erro na abertura do arquivo." << endl;
+    } else {
         cout << "Arquivo aberto para leitura com sucesso." << endl;
-    }*/
-//OBSERVEM QUE AQUI, ESSE TRECHO DE CÓDIGO FUNCIONA
-//POSICIONA CURSOR EM UMA DETERMINA POSIÇÃO, REALIZA LEITURA DE 100 (chutei um valor) CARACTERES E MANDA IMPRIMIR
-//CERTO? ESSE MESMO CÓDIGO, NO MÉTODO INSEREFIM() NÃO FUNCIONA.    
-    myfile.seekg(37, ios::beg);
-    char buffer[100];
-    myfile.read(buffer, 100);
-    buffer[100] = '\0';
-    cout << buffer << endl;
-    cout << endl << "Fim do Construtor" << endl << endl;
-
+    }
     myfile.close();
-    
     insereFim();
 }
 
-bool GerenciadorArquivo::insereFim() { //NOME PROVISORIO
-    //variaveis
-    char c;
-    vector <int> posicao;
-    int inicio, fim;
-
+bool
+GerenciadorArquivo::carregarArquivo() {
 
     ifstream myfile(caminhoArquivo);
     if (!myfile) {
-        cerr << "Erro na abertura do arquivo." << endl;
-    }
-
-    myfile.seekg(0, ios::beg); //POSICIONA CURSOR NO COMEÇO DO ARQUIVO
-
-//PERCORRE ARQUIVO, ARMAZENANDO POSIÇÃO (INT) DOS #
-    while (!myfile.eof()) {
-        myfile.get(c);
-        if (c == '#') {
-            posicao.insert(posicao.end(), myfile.tellg());
-        }
-    }
-
-    myfile.seekg(0, ios::beg);
-    vector <int>::iterator scan = posicao.begin();
-
-//POSICIONA CURSOR EM CIMA DE UM HASHTAG. CALCULA TAMANHO DO CAMPO. CRIA VETOR DE CHAR. LÊ A QUANTIDADE DE CARACTERES CALCULADA E MANDA EXIBIR
-    while (scan != posicao.end()) {
-
-        inicio = *scan;
-        //cout << inicio << endl;
-        scan++;
-        if (scan == posicao.end()) {
-            break;
-        } else {
-            fim = *scan;
-            //cout << fim << endl;
-            scan--;
-//CALCULA TAMANHO DO CAMPO
-            int tamanho = fim - inicio;
-            //cout << tamanho << endl << endl;
-            //myfile.seekg(inicio, ios::beg);
-            //char buffer[tamanho];
-            //myfile.read(buffer, tamanho);
-            //cout << buffer << endl;
-//POSICIONA CURSOR EM CIMA DE UM HASHTAG. CRIA VETOR DE CHAR DO TAMANHO CALCULADO. LÊ ARQUVIVO A PARTIR DA POSIÇÃO DO CURSOR, ATÉ FINAL DO TAMANHO CALCULADO
-//NÃO FUNCIONA. SENDO MESMO CÓDIGO QUE ESTÁ NO CONSTRUTOR
-//TENTEI ALOCAR DINAMICAMENTE CHAR. FIZ VÁRIAS COISAS. NÃO FUNCIONA
-            myfile.seekg(inicio, ios::beg);
-            char buffer[tamanho];
-            myfile.read(buffer, tamanho);
-            buffer[tamanho] = '\0';
-            cout << buffer << endl;
-        }
-        scan++;
+        cout << "Erro na abertura do arquivo." << endl;
+    } else {
+        cout << "Arquivo aberto para leitura com sucesso." << endl;
     }
 }
 
-bool GerenciadorArquivo::carregarArquivo() {
+bool
+GerenciadorArquivo::insereFim() //Identifica quantidade de campos e posição de inicio dos registros.
+{
 
     ifstream myfile(caminhoArquivo);
-    if (!myfile) {
-        cerr << "Erro na abertura do arquivo." << endl;
-    } /*else {
-        cout << "Arquivo aberto para leitura com sucesso." << endl;
-    }*/
+    char line;
+    vector <int> posicao;
+
+    int cpipe = 0, pipe = 0, comparapipe = 0, j = 0;
+
+    if (myfile.is_open()) {
+        while (!myfile.eof()) //enquanto end of file for false continua
+        {
+            myfile.get(line);
+            if (cpipe == 0) {
+                if (line == '|') {
+                    pipe++;
+                }
+            }
+            if (line == '#') {
+                cpipe = 1;
+                posicao.insert(posicao.end(), myfile.tellg());
+            }
+        }
+    
+
+        myfile.close();
+
+        ifstream myfile(caminhoArquivo);
+
+        for (j = 0; j <= pipe; j++) {
+
+            ofstream index("index" + to_string(j), ios::out);
+
+            for (int i = 0; i < posicao.size(); i++) {
+                myfile.seekg(posicao[i]);
+
+                if (i != posicao.size() - 1) {
+                    index << i << '|';
+
+                }
+
+                line = 'a';
+
+
+                while (comparapipe < j) {
+                    line = 'a';
+                    while (line != '|') {
+                        myfile.get(line);
+                        if (line == '|') {
+                            comparapipe++;
+                        }
+                    }
+                }
+
+                line = 'a';
+
+
+                while (line != '|') {
+                    myfile.get(line);
+                    if (line == '|' || (i == posicao.size() - 1)) {
+                        line = '|';
+                    } else {
+                        index << line;
+                    }
+                }
+                index << endl;
+                comparapipe = 0;
+            }
+        }
+    }
 }
 
 GerenciadorArquivo::~GerenciadorArquivo() {
